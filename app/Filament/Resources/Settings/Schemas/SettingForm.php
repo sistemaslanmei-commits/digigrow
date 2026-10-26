@@ -93,7 +93,7 @@ class SettingForm
                     ->visibility('public')
                     ->getUploadedFileNameForStorageUsing(
                         fn (UploadedFile $file): string => 'BANNER-CATALOGO-' . time() . '-' . str()->random(5) . '.' . $file->getClientOriginalExtension()
-                    ),
+                ),
 
                 FileUpload::make('services_banner')
                     ->label('Banner - Servicios')
@@ -113,7 +113,9 @@ class SettingForm
                     ->visibility('public')
                     ->getUploadedFileNameForStorageUsing(
                         fn (UploadedFile $file): string => 'BANNER-BRANDS-' . time() . '-' . str()->random(5) . '.' . $file->getClientOriginalExtension()
-                    ),
+                ),
+
+                
 
 
                 TextInput::make('facebook_url')
@@ -134,7 +136,11 @@ class SettingForm
                     ->placeholder('https://linkedin.com/company/digigrow')
                     ->maxLength(255)
                     ->columnSpanFull(),
+
+                
         ]);
+
+
 
     }
 }
