@@ -3,15 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', $setting->site_name ?? 'DigiGrow - Catálogo Digital')</title>
-    
-    <!-- Bootstrap 5.3 CSS & FontAwesome Icons -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- 1. SEO Básico Dinámico -->
+    <title>@yield('title', ($setting->site_name ?? 'DigiGrow') . ' - Soluciones Tecnológicas y Catálogo Digital')</title>
+    <meta name="description" content="@yield('meta_description', 'DigiGrow: Catálogo oficial de equipamiento informático, redes, servidores y soporte técnico especializado en Perú.')">
+    <meta name="keywords" content="@yield('meta_keywords', 'tecnologia, servidores, redes, laptops, equipamiento B2B, DigiGrow, soporte tecnico')">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- 2. Open Graph / Redes Sociales y WhatsApp -->
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:site_name" content="{{ $setting->site_name ?? 'DigiGrow' }}">
+    <meta property="og:title" content="@yield('title', $setting->site_name ?? 'DigiGrow - Catálogo Digital')">
+    <meta property="og:description" content="@yield('meta_description', 'Explora nuestro catálogo de infraestructura tecnológica y solicita cotizaciones directas por WhatsApp.')">
+    <meta property="og:image" content="@yield('og_image', !empty($setting?->logo) ? asset('storage/' . $setting->logo) : asset('images/og-default.jpg'))">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:locale" content="es_PE">
+
+    <!-- 3. Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', $setting->site_name ?? 'DigiGrow')">
+    <meta name="twitter:description" content="@yield('meta_description', 'Soluciones tecnológicas integrales y catálogo digital de equipamiento.')">
+    <meta name="twitter:image" content="@yield('og_image', !empty($setting?->logo) ? asset('storage/' . $setting->logo) : asset('images/og-default.jpg'))">
+
+    <!-- 4. Favicon -->
+    @if(!empty($setting?->logo))
+        <link rel="icon" type="image/png" href="{{ asset('storage/' . $setting->logo) }}">
+    @endif
+
+    <!-- 5. Bootstrap 5.3 CSS & FontAwesome Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!--iconos-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    
-    <!-- Slick Carousel CSS -->
+
+    <!-- 6. Slick Carousel CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
     

@@ -1,27 +1,46 @@
 @extends('layouts.app')
 
+{{-- Título de la pestaña y previsualización --}}
 @section('title', $product->name . ' - ' . ($setting->site_name ?? 'DigiGrow'))
+
+{{-- Descripción específica para Google y WhatsApp --}}
+@section('meta_description', Str::limit(strip_tags($product->short_description ?? $product->description), 155))
+
+{{-- Imagen de la tarjeta Open Graph (WhatsApp) --}}
+@if($product->image)
+    @section('og_image', asset('storage/' . $product->image))
+@endif
 
 @section('content')
 <!-- Miga de Pan / Breadcrumb -->
-<div class="bg-light py-3 border-bottom mb-4">
-    <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 small">
-                <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none">Inicio</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('catalogo') }}" class="text-decoration-none">Catálogo</a></li>
-                @if($product->category)
-                    <li class="breadcrumb-item"><a href="{{ route('catalogo', ['categoria' => $product->category->slug]) }}" class="text-decoration-none">{{ $product->category->name }}</a></li>
-                @endif
-                <li class="breadcrumb-item active" aria-current="page">{{ Str::limit($product->name, 35) }}</li>
-            </ol>
-        </nav>
-    </div>
+<!-- Migas de Pan (Breadcrumb) Nivel 15 - Colocar en product-detail.blade.php -->
+ 
+<div class="container mt-3 mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light p-2 px-3 rounded-3 shadow-sm flex-wrap align-items-center mb-0">
+            <li class="breadcrumb-item">
+                <a href="{{ route('home') }}" class="text-decoration-none fw-semibold">Inicio</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ route('catalogo') }}" class="text-decoration-none fw-semibold">Catálogo</a>
+            </li>
+            @if($product->category)
+                <li class="breadcrumb-item">
+                    <a href="{{ route('catalogo', ['categoria' => $product->category->slug]) }}" class="text-decoration-none">
+                        {{ $product->category->name }}
+                    </a>
+                </li>
+            @endif
+            <li class="breadcrumb-item active text-truncate" aria-current="page" style="max-width: 160px;">
+                {{ $product->name }}
+            </li>
+        </ol>
+    </nav>
 </div>
 
 <div class="container mb-5">
     <!-- FILA SUPERIOR: Galería a la izquierda, Resumen y CTAs a la derecha -->
-    <div class="row g-5">
+    <div class="row g-3 g-lg-5 align-items-start">
         <!-- Columna Izquierda: Galería Multimedia (image e images) -->
         <div class="col-lg-6">
             <div class="border rounded-4 p-4 text-center bg-white shadow-sm mb-3 position-relative">
@@ -56,10 +75,16 @@
         <div class="col-lg-6">
             <div class="d-flex align-items-center gap-2 mb-2">
                 @if($product->category)
-                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill">{{ $product->category->name }}</span>
+                    <a href="{{ route('catalogo', ['categoria' => $product->category->slug]) }}" 
+                        class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill text-decoration-none">
+                        {{ $product->category->name }}
+                    </a>
                 @endif
                 @if($product->brand)
-                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-3 py-1 rounded-pill">{{ $product->brand->name }}</span>
+                    <a href="{{ route('catalogo', ['marca' => $product->brand->slug]) }}" 
+                        class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-3 py-1 rounded-pill text-decoration-none">
+                        {{ $product->brand->name }}
+                    </a>
                 @endif
             </div>
 
@@ -78,7 +103,7 @@
             <!-- Botones de Acción / CTAs -->
             <div class="d-flex flex-wrap gap-3 mb-4">
                 @if(!empty($setting?->whatsapp))
-                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $setting->whatsapp) }}?text=Hola,%20deseo%20cotizar%20el%20producto:%20{{ urlencode($product->name) }}%20(SKU:%20{{ $product->sku ?? 'S/N' }})" 
+                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $setting->whatsapp) }}?text=Hola,%20deseo%20cotizar%20el%20producto:%20{{ urlencode($product->name) }}%20(SKU:%20{{ $product->sku ?? 'S/N' }})%20Enlace:%20{{ urlencode(route('products.show', $product->slug)) }}" 
                        target="_blank" class="btn btn-success btn-lg rounded-pill px-4 shadow-sm fw-bold">
                         <i class="fab fa-whatsapp me-2"></i>Cotizar por WhatsApp
                     </a>
